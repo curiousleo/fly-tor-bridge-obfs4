@@ -65,3 +65,12 @@ This outputs the client configuration (aka "bridge line").
 If you have [`qrencode`](https://fukuchi.org/works/qrencode/) installed, then the configuration will be displayed as a QR code.
 
 Test your new bridge by following the instructions for the [desktop version](https://tb-manual.torproject.org/bridges/#entering-bridge-addresses) or the [mobile version](https://tb-manual.torproject.org/mobile-tor/#circumvention) of the Tor browser.
+
+# Further info and troubleshooting
+
+Open your [Fly dashboard](https://fly.io/apps/) to view logs and metrics and manage your apps.
+
+Note that it takes a few days for your bridge to be picked up by the Tor network.
+There are good reasons for this, see [The lifecycle of a new relay](https://blog.torproject.org/lifecycle-of-a-new-relay/).
+
+This guide is based on the [Docker deployment guide](https://community.torproject.org/relay/setup/bridge/docker/) for obfs4.
