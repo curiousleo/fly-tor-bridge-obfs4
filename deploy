@@ -16,6 +16,7 @@ fi
 # Generate random app name.
 export app="bridge-$(tr -dc '0-9a-z' </dev/urandom | dd bs=8 count=1 2>/dev/null)"
 echo "If something goes wrong, run 'flyctl apps destroy ${app}' and start again."
+echo
 
 # Create app, allocate IP address, create volume.
 flyctl launch --name "${app}" --region fra --image thetorproject/obfs4-bridge:latest --no-deploy
@@ -25,7 +26,7 @@ flyctl ips allocate-v4 --config "${config}"
 flyctl volumes create fly_obfs4 --region fra --size 1 --config "${config}"
 
 # Read IPv4 address.
-export addr="$(flyctl ips list --json | \
+export addr="$(flyctl ips list --json --config "${config}" | \
     jq --raw-output '.[] | select(.Type == "v4") | .Address')"
 
 # Generate both ports in one go to make sure they are not equal.
@@ -90,4 +91,5 @@ EOF
 
 # Deploy
 flyctl deploy --config "${config}"
+echo
 echo "Run 'CONFIG="${config}" ./show-bridge-line' to display the client configuration."
