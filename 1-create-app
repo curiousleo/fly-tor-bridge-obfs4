@@ -1,9 +1,0 @@
-#!/usr/bin/env bash
-#
-# Launch the app for the first time to generate a name and allocate an IP address.
-# This will launch the obfs4-bridge, but the bridge WILL NOT BE OPERATIONAL: we
-# have not configured it yet. That happens next.
-
-set -Eeuo pipefail
-
-flyctl launch --generate-name --region fra --image thetorproject/obfs4-bridge:latest
