@@ -7,14 +7,14 @@ Launch an obsf4 Tor bridge on Fly **for free** and in **under a minute!**
 [Fly](https://fly.io/docs/about/pricing/#free-allowances) lets you run up to three small VMs, 3 GB persistent volumes and 100 GB outbound data for free.
 This setup uses 1 VM, a 1 GB persistent volume and 33 GB outbound data, allowing you to launch up to three bridges while staying within Fly's free tier.
 
-# Set up `flyctl` and `jq`
+## Set up `flyctl` and `jq`
 
 1. [Install `flyctl`](https://fly.io/docs/getting-started/installing-flyctl/).
 2. Create an account with `flyctl auth signup` or log in with `flyctl auth login`.
 
 You will also need [`jq`](https://stedolan.github.io/jq/).
 
-# Deploy the obsf4 Tor bridge
+## Deploy the obsf4 Tor bridge
 
 ```
 $ EMAIL=your@email.com ./deploy
@@ -24,7 +24,7 @@ Run 'CONFIG=bridge-[...]-fly.toml ./show-bridge-line' to display the client conf
 
 This will create a new Fly app with a randomised name, generate a `fly.toml` file, and deploy the [obsf4 Tor bridge](https://gitlab.torproject.org/tpo/anti-censorship/docker-obfs4-bridge).
 
-# Get the client configuration
+## Get the client configuration
 
 If the deployment succeeded, then a configuration file will have been created. The last line of the output of the `deploy` script shows you the full path to the configuration file.
 
@@ -66,7 +66,7 @@ If you have [`qrencode`](https://fukuchi.org/works/qrencode/) installed, then th
 
 Test your new bridge by following the instructions for the [desktop version](https://tb-manual.torproject.org/bridges/#entering-bridge-addresses) or the [mobile version](https://tb-manual.torproject.org/mobile-tor/#circumvention) of the Tor browser.
 
-# Further info and troubleshooting
+## Further info and troubleshooting
 
 Open your [Fly dashboard](https://fly.io/apps/) to view logs and metrics and manage your apps.
 
