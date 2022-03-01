@@ -4,7 +4,7 @@ __Launch an [obsf4 Tor bridge](https://tb-manual.torproject.org/circumvention/) 
 
 > obfs4 makes Tor traffic look random, and also prevents censors from finding bridges by Internet scanning.
 
-# Setup
+# Set up `flyctl` and `jq`
 
 1. [Install `flyctl`](https://fly.io/docs/getting-started/installing-flyctl/).
 2. Create an account with `flyctl auth signup` or log in with `flyctl auth login`.
