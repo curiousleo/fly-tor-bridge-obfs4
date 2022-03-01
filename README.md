@@ -14,7 +14,7 @@ You will also need [`jq`](https://stedolan.github.io/jq/).
 # Deploy the obsf4 Tor bridge
 
 ```console
-$ make deploy
+$ EMAIL=your@email.com make deploy
 ```
 
 This will create a new Fly app with a randomised name, generate a `fly.toml` file, and deploy the [obsf4 Tor bridge](https://gitlab.torproject.org/tpo/anti-censorship/docker-obfs4-bridge).
