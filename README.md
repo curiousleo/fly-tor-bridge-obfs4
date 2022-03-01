@@ -18,17 +18,51 @@ You will also need [`jq`](https://stedolan.github.io/jq/).
 
 ```console
 $ EMAIL=your@email.com ./deploy
+[...]
+Run 'CONFIG=bridge-[...]-fly.toml ./show-bridge-line' to display the client configuration.
 ```
 
 This will create a new Fly app with a randomised name, generate a `fly.toml` file, and deploy the [obsf4 Tor bridge](https://gitlab.torproject.org/tpo/anti-censorship/docker-obfs4-bridge).
 
 # Get the client configuration
 
+If the deployment succeeded, then a configuration file will have been created. The last line of the output of the `deploy` script shows you the full path to the configuration file.
+
 ```console
-$ ./show-bridge-line
+# See the output of the `deploy` script for what CONFIG should be set to.
+$ CONFIG=bridge-[...]-fly.toml ./show-bridge-line
+[...]
+obfs4 213.188.207.9:6562 27BA119DCCD788BA880280706A844AA8768E8957 cert=BNBPLYgi35O0adzllTRHF06dR4bb1KppWdZM/3NlhAU5pVap0bX6qDxTNZatGNGy/WcKDA iat-mode=0
+█████████████████████████████████████████████████████
+█████████████████████████████████████████████████████
+████ ▄▄▄▄▄ █▀▄█▀███▀ ▄ █ ▀██▀▀  █ ▄▄█ █▀▄█ ▄▄▄▄▄ ████
+████ █   █ █▀  ███▄█ ▄ ▄ ▄ █▀▀▀ ▄▀█▄█ █ ▀█ █   █ ████
+████ █▄▄▄█ █▀ ▀ ▄▄▄ ▄███ ▄▄▄ ▀ █▄▀▄▀▀▀▄▄▄█ █▄▄▄█ ████
+████▄▄▄▄▄▄▄█▄█ ▀ ▀▄▀▄█ ▀ █▄█ ▀ ▀ █ █▄█▄▀ █▄▄▄▄▄▄▄████
+████  ▄  ▀▄▄  ▄██▀█▀██  ▄   ▄█▄█▀█ █ ▀▄▀█▄▀ █▄█ ▀████
+████▀▀▀▀▀▀▄██▀▀▀  ▄▀██▀▄▀▀▄█     ▄██▀ ██ ▄▄█ █▀▄▀████
+████▀▀▄ ▄▀▄ ▀▄▀█▀▀▀▀▄█▄█▄▀▄█▄█▀▄ █▄▀█ ▀▄▀█▄▄ ▄▀ █████
+█████▄▀▄█▄▄▀█▄█ █▄  ▀█ █▄ ▀▀ ▄▀ █▀█▀█▄ ▀▀█  ▄▄▀▀█████
+████▄  ▄▀█▄▄▄  █▀▄▄▄▀█ ▄█▀▄▀  █ ▀▄▀█▀█ ▄ ▀█▄▄▄▀█ ████
+████▄▀  ▄█▄ █▀█  ▄▀▄ ▄▄▄▄▀▀█▀▀█▀▀█▀▀  ▀▀█  ▀ ▄ ▄▀████
+████ ▄█  ▄▄▄ ▀▄ ▄▀▀▀▀█▄▀ ▄▄▄ ▄  ▀█▀██    ▄▄▄  ▀█▀████
+████ █▀▄ █▄█ ████▀██▄▄██ █▄█ ▀▄ ▄ ▀█▄▀██ █▄█ █ █▀████
+████▄██ ▄ ▄▄  ▀▀▄▀█▀█▄▀▀▄▄ ▄ ▄█▀▀ ▄█▄▀▀ ▄ ▄ ▄█▀█▀████
+████▀▄▄▄▀▀▄ █ ▄▀█▄▀▀█▄▀ ▀   ▄█▀█▀▀▄ █ ▀▀██▀ ▀▄  ▀████
+████▀▀██ ▀▄  █▀▄ █▀  ▀█ ▄▄█▄ ▄  ▄█ ██    ▄▀▀█▄   ████
+████▄ ▀ █▀▄██  ▄▀▄   ▀    ▀█▀ ▄▄▀█▀█▄█▄  ▄█▄▄ ▄▀▀████
+████▄▄▄▀▄ ▄ ██▀▄ ▄▄▄▀▀ █▄▄ █▀█▀▀▀█  ▀▄▀▄▀▄▀▀▄███ ████
+█████▀▀▀ █▄▀ ▄█▄ █ ▄ ▀▄▀█▀▀▄ ▄▄▄▀█▄▀▀▀ ▄█▀▄ ▀█▄ █████
+████▄██▄▄█▄▄ █ █▀█▀▀▀▀█  ▄▄▄ ▄▀▄██▀█▄ █  ▄▄▄ ▀█ █████
+████ ▄▄▄▄▄ █▄██▀ ▀█▀▀▄█▄ █▄█ █ ▀▄█▀█▀▄   █▄█ ▀▀██████
+████ █   █ █ █▄▀▄▀█▀█▄▀▄    ▄▄▄  ▄ ▄  ▀  ▄▄ ▄  █▄████
+████ █▄▄▄█ █ ▀█▀█▀▄▀█▄  ▀▀ ▄▄ █▀▀  ▀▀ ▀▀███ ▀▄▄██████
+████▄▄▄▄▄▄▄█▄█▄██████████████▄█▄█▄████▄▄▄████▄█▄█████
+█████████████████████████████████████████████████████
+█████████████████████████████████████████████████████
 ```
 
-Outputs the client configuration (aka "bridge line").
+This outputs the client configuration (aka "bridge line").
 If you have [`qrencode`](https://fukuchi.org/works/qrencode/) installed, then the configuration will be displayed as a QR code.
 
 Test your new bridge by following the instructions for the [desktop version](https://tb-manual.torproject.org/bridges/#entering-bridge-addresses) or the [mobile version](https://tb-manual.torproject.org/mobile-tor/#circumvention) of the Tor browser.
