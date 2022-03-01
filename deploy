@@ -7,16 +7,26 @@ set -Eeuo pipefail
 # EMAIL must be set.
 export email="${EMAIL}"
 
+# fly.toml should not exist.
+if [[ -a 'fly.toml' ]]; then
+    echo 'ERROR: fly.toml already exists.'
+    exit 1
+fi
+
 # Generate random app name.
 export app="bridge-$(tr -dc '0-9a-z' </dev/urandom | dd bs=8 count=1 2>/dev/null)"
+echo "If something goes wrong, run 'flyctl apps destroy ${app}' and start again."
+echo
 
 # Create app, allocate IP address, create volume.
 flyctl launch --name "${app}" --region fra --image thetorproject/obfs4-bridge:latest --no-deploy
-flyctl ips allocate-v4
-flyctl volumes create fly_obfs4 --region fra --size 1
+config="${app}-fly.toml"
+mv fly.toml "${config}"
+flyctl ips allocate-v4 --config "${config}"
+flyctl volumes create fly_obfs4 --region fra --size 1 --config "${config}"
 
 # Read IPv4 address.
-export addr="$(flyctl ips list --json | \
+export addr="$(flyctl ips list --json --config "${config}" | \
     jq --raw-output '.[] | select(.Type == "v4") | .Address')"
 
 # Generate both ports in one go to make sure they are not equal.
@@ -24,7 +34,7 @@ ports="$(shuf -i 1024-65535 -n 2)"
 export or_port="$(echo "${ports}" | head -n1)"
 export pt_port="$(echo "${ports}" | tail -n1)"
 
-cat <<EOF >fly.toml
+cat <<EOF >"${config}"
 app = "${app}"
 
 kill_signal = "SIGINT"
@@ -80,4 +90,6 @@ ORPort 0.0.0.0:${or_port} NoAdvertise"""
 EOF
 
 # Deploy
-flyctl deploy
+flyctl deploy --config "${config}"
+echo
+echo "Run 'CONFIG="${config}" ./show-bridge-line' to display the client configuration."

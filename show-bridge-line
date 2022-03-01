@@ -8,14 +8,17 @@
 
 set -Eeuo pipefail
 
-addr="$(flyctl ips list --json | \
+# CONFIG must be set.
+config="${CONFIG}"
+
+addr="$(flyctl ips list --json --config "${config}" | \
     jq --raw-output '.[] | select(.Type == "v4") | .Address')"
-port="$(flyctl config display | \
+port="$(flyctl config display --config "${config}" | \
     jq '.services[1].ports[0].port')"
-fingerprint="$(flyctl ssh console --command 'cat /var/log/tor/log' | \
+fingerprint="$(flyctl ssh console --command 'cat /var/log/tor/log' --config "${config}" | \
     sed $'s/\r$//' | \
     sed "s|^.*Your Tor server's identity key *fingerprint is .*\([0-9A-F]\{40\}\)'$|\1|gp;d")"
-obfs4_args="$(flyctl ssh console --command 'cat /var/lib/tor/pt_state/obfs4_bridgeline.txt' | \
+obfs4_args="$(flyctl ssh console --command 'cat /var/lib/tor/pt_state/obfs4_bridgeline.txt' --config "${config}" | \
     sed "s|^Bridge obfs4 .*\(cert=.*\)$|\1|gp;d")"
 obfs4_args="${obfs4_args%"${obfs4_args##*[![:space:]]}"}" # Remove trailing whitespace.
 
