@@ -55,7 +55,6 @@ ORPort 0.0.0.0:${or_port} NoAdvertise"""
   OBFS4V_AccountingMax = "33 GBytes"
   OBFS4V_AccountingRule = "out"
   OBFS4V_AccountingStart = "month 1 00:00"
-  OBFS4V_HeartbeatPeriod = "30 minutes"
 
 [mounts]
   source = "fly_obfs4"
