@@ -16,8 +16,9 @@ You will also need [`jq`](https://stedolan.github.io/jq/).
 
 # Deploy the obsf4 Tor bridge
 
-```console
+```
 $ EMAIL=your@email.com ./deploy
+
 [...]
 Run 'CONFIG=bridge-[...]-fly.toml ./show-bridge-line' to display the client configuration.
 ```
@@ -28,11 +29,12 @@ This will create a new Fly app with a randomised name, generate a `fly.toml` fil
 
 If the deployment succeeded, then a configuration file will have been created. The last line of the output of the `deploy` script shows you the full path to the configuration file.
 
-```console
-# See the output of the `deploy` script for what CONFIG should be set to.
+<pre>
 $ CONFIG=bridge-[...]-fly.toml ./show-bridge-line
+
 [...]
 obfs4 213.188.207.9:6562 27BA119DCCD788BA880280706A844AA8768E8957 cert=BNBPLYgi35O0adzllTRHF06dR4bb1KppWdZM/3NlhAU5pVap0bX6qDxTNZatGNGy/WcKDA iat-mode=0
+<div style="line-height=1.2">
 █████████████████████████████████████████████████████
 █████████████████████████████████████████████████████
 ████ ▄▄▄▄▄ █▀▄█▀███▀ ▄ █ ▀██▀▀  █ ▄▄█ █▀▄█ ▄▄▄▄▄ ████
@@ -60,7 +62,8 @@ obfs4 213.188.207.9:6562 27BA119DCCD788BA880280706A844AA8768E8957 cert=BNBPLYgi3
 ████▄▄▄▄▄▄▄█▄█▄██████████████▄█▄█▄████▄▄▄████▄█▄█████
 █████████████████████████████████████████████████████
 █████████████████████████████████████████████████████
-```
+</div>
+</pre>
 
 This outputs the client configuration (aka "bridge line").
 If you have [`qrencode`](https://fukuchi.org/works/qrencode/) installed, then the configuration will be displayed as a QR code.
