@@ -1,10 +1,10 @@
 # fly-tor-bridge-obfs4
 
-Launch an [obsf4 Tor bridge](https://tb-manual.torproject.org/circumvention/) on [Fly](https://fly.io) **for free** and in **under a minute!**
+Launch an obsf4 Tor bridge on Fly **for free** and in **under a minute!**
 
-> obfs4 makes Tor traffic look random, and also prevents censors from finding bridges by Internet scanning.
+> [obfs4](https://tb-manual.torproject.org/circumvention/) makes Tor traffic look random, and also prevents censors from finding bridges by Internet scanning.
 
-Fly lets you run up to three small VMs, 3 GB persistent volumes and 100 GB outbound data for free.
+[Fly](https://fly.io/docs/about/pricing/#free-allowances) lets you run up to three small VMs, 3 GB persistent volumes and 100 GB outbound data for free.
 This setup uses 1 VM, a 1 GB persistent volume and 33 GB outbound data, allowing you to launch up to three bridges while staying within Fly's free tier.
 
 # Set up `flyctl` and `jq`
