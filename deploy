@@ -34,6 +34,9 @@ ports="$(shuf -i 1024-65535 -n 2)"
 export or_port="$(echo "${ports}" | head -n1)"
 export pt_port="$(echo "${ports}" | tail -n1)"
 
+# References:
+# https://community.torproject.org/relay/setup/bridge/docker/
+# https://helpmanual.io/man5/torrc/
 cat <<EOF >"${config}"
 app = "${app}"
 
@@ -44,10 +47,15 @@ kill_timeout = 5
   image = "thetorproject/obfs4-bridge:latest"
 
 [env]
+  EMAIL = "${email}"
   OR_PORT = """${addr}:${or_port} NoListen
 ORPort 0.0.0.0:${or_port} NoAdvertise"""
   PT_PORT = "${pt_port}"
-  EMAIL = "${email}"
+  OBFS4_ENABLE_ADDITIONAL_VARIABLES = "1"
+  OBFS4V_AccountingMax = "33 GBytes"
+  OBFS4V_AccountingRule = "out"
+  OBFS4V_AccountingStart = "month 1 00:00"
+  OBFS4V_HeartbeatPeriod = "30 minutes"
 
 [mounts]
   source = "fly_obfs4"
