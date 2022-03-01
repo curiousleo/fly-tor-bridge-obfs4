@@ -1,0 +1,64 @@
+#!/usr/bin/env bash
+#
+# Generate fly.toml.
+
+set -Eeuo pipefail
+
+function read_var() {
+    jq --raw-output ".$1" <config.json
+}
+
+cat <<EOF
+app = "$(read_var app)"
+
+kill_signal = "SIGINT"
+kill_timeout = 5
+
+[build]
+  image = "thetorproject/obfs4-bridge:latest"
+
+[env]
+  OR_PORT = """$(read_var addr):$(read_var or_port) NoListen
+ORPort 0.0.0.0:$(read_var or_port) NoAdvertise"""
+  PT_PORT = "$(read_var pt_port)"
+  EMAIL = "$(read_var email)"
+
+[mounts]
+  source = "fly_obfs4"
+  destination = "/var/lib/tor"
+
+[[services]]
+  internal_port = $(read_var or_port)
+  processes = ["app"]
+  protocol = "tcp"
+
+  [services.concurrency]
+    hard_limit = 25
+    soft_limit = 20
+    type = "connections"
+
+  [[services.ports]]
+    port = $(read_var or_port)
+
+  [[services.tcp_checks]]
+    grace_period = "1s"
+    interval = "15s"
+    restart_limit = 0
+    timeout = "2s"
+
+[[services]]
+  # The PT port must be defined second for the get-bridge-line script to work.
+
+  internal_port = $(read_var pt_port)
+  processes = ["app"]
+  protocol = "tcp"
+
+  [[services.ports]]
+    port = $(read_var pt_port)
+
+  [[services.tcp_checks]]
+    grace_period = "1s"
+    interval = "15s"
+    restart_limit = 0
+    timeout = "2s"
+EOF

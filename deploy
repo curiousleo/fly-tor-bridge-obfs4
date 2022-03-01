@@ -1,0 +1,83 @@
+#!/usr/bin/env bash
+#
+# Generate fly.toml for a new app and deploy the bridge.
+
+set -Eeuo pipefail
+
+# EMAIL must be set.
+export email="${EMAIL}"
+
+# Generate random app name.
+export app="bridge-$(tr -dc '0-9a-z' </dev/urandom | dd bs=8 count=1 2>/dev/null)"
+
+# Create app, allocate IP address, create volume.
+flyctl launch --name "${app}" --region fra --image thetorproject/obfs4-bridge:latest --no-deploy
+flyctl ips allocate-v4
+flyctl volumes create fly_obfs4 --region fra --size 1
+
+# Read IPv4 address.
+export addr="$(flyctl ips list --json | \
+    jq --raw-output '.[] | select(.Type == "v4") | .Address')"
+
+# Generate both ports in one go to make sure they are not equal.
+ports="$(shuf -i 1024-65535 -n 2)"
+export or_port="$(echo "${ports}" | head -n1)"
+export pt_port="$(echo "${ports}" | tail -n1)"
+
+cat <<EOF >fly.toml
+app = "${app}"
+
+kill_signal = "SIGINT"
+kill_timeout = 5
+
+[build]
+  image = "thetorproject/obfs4-bridge:latest"
+
+[env]
+  OR_PORT = """${addr}:${or_port} NoListen
+ORPort 0.0.0.0:${or_port} NoAdvertise"""
+  PT_PORT = "${pt_port}"
+  EMAIL = "${email}"
+
+[mounts]
+  source = "fly_obfs4"
+  destination = "/var/lib/tor"
+
+[[services]]
+  internal_port = ${or_port}
+  processes = ["app"]
+  protocol = "tcp"
+
+  [services.concurrency]
+    hard_limit = 25
+    soft_limit = 20
+    type = "connections"
+
+  [[services.ports]]
+    port = ${or_port}
+
+  [[services.tcp_checks]]
+    grace_period = "1s"
+    interval = "15s"
+    restart_limit = 0
+    timeout = "2s"
+
+[[services]]
+  # The PT port must be defined second for the get-bridge-line script to work.
+
+  internal_port = ${pt_port}
+  processes = ["app"]
+  protocol = "tcp"
+
+  [[services.ports]]
+    port = ${pt_port}
+
+  [[services.tcp_checks]]
+    grace_period = "1s"
+    interval = "15s"
+    restart_limit = 0
+    timeout = "2s"
+EOF
+
+# Deploy
+flyctl deploy
