@@ -4,8 +4,11 @@
 
 set -Eeuo pipefail
 
-# EMAIL must be set.
+# EMAIL is mandatory.
 export email="${EMAIL}"
+
+# REGION is optional. See `flyctl platform regions` for the full list.
+export region="${REGION:-fra}"
 
 # fly.toml should not exist.
 if [[ -a 'fly.toml' ]]; then
@@ -19,11 +22,11 @@ echo "If something goes wrong, run 'flyctl apps destroy ${app}' and start again.
 echo
 
 # Create app, allocate IP address, create volume.
-flyctl launch --name "${app}" --region fra --image thetorproject/obfs4-bridge:latest --no-deploy
+flyctl launch --name "${app}" --region "${region}" --image thetorproject/obfs4-bridge:latest --no-deploy
 config="${app}-fly.toml"
 mv fly.toml "${config}"
 flyctl ips allocate-v4 --config "${config}"
-flyctl volumes create fly_obfs4 --region fra --size 1 --config "${config}"
+flyctl volumes create fly_obfs4 --region "${region}" --size 1 --config "${config}"
 
 # Read IPv4 address.
 export addr="$(flyctl ips list --json --config "${config}" | \
