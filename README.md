@@ -17,12 +17,15 @@ You will also need [`jq`](https://stedolan.github.io/jq/).
 ## Deploy the obsf4 Tor bridge
 
 ```
-$ EMAIL=your@email.com ./deploy
+$ EMAIL=your@email.com ./deploy # To specify where in the world to deploy the bridge, see below.
 [...]
 Run 'CONFIG=bridge-[...]-fly.toml ./show-bridge-line' to display the client configuration.
 ```
 
-This will create a new Fly app with a randomised name, generate a `fly.toml` file, and deploy the [obsf4 Tor bridge](https://gitlab.torproject.org/tpo/anti-censorship/docker-obfs4-bridge).
+This will create a new Fly app with a randomised name, generate a Fly configuration file, and deploy the [obsf4 Tor bridge](https://gitlab.torproject.org/tpo/anti-censorship/docker-obfs4-bridge).
+
+By default, the bridge will start in Frankfurt, Germany (fra).
+To run the bridge somewhere else, pick a region from `flyctl platform regions` and deploy with `REGION=xyz EMAIL=your@email.com ./deploy`.
 
 ## Get the client configuration
 
@@ -32,34 +35,8 @@ If the deployment succeeded, then a configuration file will have been created. T
 $ CONFIG=bridge-[...]-fly.toml ./show-bridge-line
 [...]
 obfs4 213.188.219.143:63132 280C959B47FBF579CC6852993B83549BC61733DE cert=nH0moM+NS5AKvfFaMCEy4xiCkVeY9drilJ/bWH0lHK8kzpSpr75vrRdcGGvUEBcTinMHDg iat-mode=0
-█████████████████████████████████████████████████████
-█████████████████████████████████████████████████████
-████ ▄▄▄▄▄ █ █▄█▀▄ ▄  ▀ ▄▀▀▄ ██▄█▄ ▀▄██▀▄█ ▄▄▄▄▄ ████
-████ █   █ █ █▄▀▄▄▀▀█▀▄▀▀▄▀███▀ █▄ ▄█ █ ▀█ █   █ ████
-████ █▄▄▄█ █▀█  █▀▀█▄█▀▄ ▄▄▄  ██ ▀▀▀▄ ▄▄▄█ █▄▄▄█ ████
-████▄▄▄▄▄▄▄█▄█▄▀▄▀▄▀ ▀ █ █▄█ ▀▄▀ ▀ ▀▄▀ ▀ █▄▄▄▄▄▄▄████
-████▄ █▀  ▄██▄██▀▄ ▄█▀▀█▄ ▄ ▄▀▀▄▄█▀▄██▄▀▄▀█▄█▄ ▄▄████
-████  ▀▄▀█▄▀▀▀ ▄ ▀ ▀ ▀█▄ ▄▄ ▀▄█▀█▀   █ █  ▄██▀▀▄▀████
-████  ▀█ ▀▄ ▀██ ▄▄▄█ ▀ █▀▄██▄▀ ▀▀██  █▄▄  ▄▀█▄▀▀▄████
-████▀  █  ▄▀▄▀▀ ▀▄  █▀ ▄█   █▄▄ ▀█ █▄ ▀▄█▄  ▀▀▄█▄████
-████▀▄██ █▄▄ ▀█▄▀▀▀▀▀▀▀ █▄▄▄█▀▄▄▄ █ █▄█▄█▄ ▀▄ ▀▀▄████
-████▀██▀▄█▄ █ ▀▄▄▀▀▄█ ▄▄  ▀ ███▄█ ▀▀ ▄ ██ ▄██▀▀▄▀████
-████▀██▀ ▄▄▄  ▀▄█ ▄▄▀▀▄▄ ▄▄▄ ▀▄▀ ▄▀▄▀██▀ ▄▄▄ ▀▀▄▄████
-█████▄▀█ █▄█ █▀█ ▀█▀▄ ▄▄ █▄█ █▄▄ ▀▄▀  ▀▄ █▄█  ███████
-████▄▀▄█ ▄▄ ▄██▀▄▄ ▄██ █ ▄   ▄██▀▄█ ▄█▄   ▄▄▄██▀█████
-████▀▄ ▄▄█▄▄▄▄▄▄ ▀▀▀ ▀▀█▄▀ █▄▄  █  █ ▄▀▀▀█▀ ▀▀▄ ▀████
-████ ▀▄▀▀▀▄ ▄▄▄▄█▄▄█▄▀██▀▀ █▀ ▀▀ ▄   ▄▀▄ ▀▄▄█▄▀██████
-████▀▀▀▀█▀▄█ ██ ▄▄ █▀ █ ▀▄█   ▄▄  ▄█▄█ ██▄█▄▀ ▄█▀████
-████▀ █ ▄█▄▄▄▄ ▄ ▀▀▀▀█ ▄▀▀▀▀▀▄▄▄ ▀▄▀ ▄▄█▀█ ▄ █  █████
-█████▀▀▀ █▄ ▀  ▀███▄██▀ █  █  ▄ ▄▀▀ ▀▄█  ▀█▄▄   █████
-████▄██▄▄█▄▄▀█▄██ ██ ██▄ ▄▄▄  ▄▀▄▄ ▄ ██  ▄▄▄ ▀▀█ ████
-████ ▄▄▄▄▄ █▀█▄▀█▀██ ▀ █ █▄█    ▄▀▄▄▄▀█▄ █▄█ ▄▄█▄████
-████ █   █ █▄█▄▀▄▄ ▄█▄▀ ▄▄ ▄ ▀▄█▀█▄ █▄▄ ▄  ▄▄ ▄▀▀████
-████ █▄▄▄█ █▀▀█▄ ▄▀▀ ▀▀▀ ▀▀ ▀ █▄▄ ▄ ▀█ ▄ ▀█ ▄ ▀██████
-████▄▄▄▄▄▄▄█▄▄▄██▄█▄███▄█▄██▄██████▄█▄█▄▄▄█▄█▄▄█▄████
-█████████████████████████████████████████████████████
-█████████████████████████████████████████████████████
 ```
+![QR code](/asset/qrcode.png "QR code")
 
 This outputs the client configuration (aka "bridge line").
 If you have [`qrencode`](https://fukuchi.org/works/qrencode/) installed, then the configuration will be displayed as a QR code.
