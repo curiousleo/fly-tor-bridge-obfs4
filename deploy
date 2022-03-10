@@ -4,6 +4,15 @@
 
 set -Eeuo pipefail
 
+command -v jq >/dev/null || {
+  echo "ERROR: 'jq' not found, please install it."
+  exit 1
+}
+command -v flyctl >/dev/null || {
+  echo "ERROR: 'flyctl' not found, please install it."
+  exit 1
+}
+
 # EMAIL is mandatory.
 export email="${EMAIL}"
 
@@ -15,8 +24,6 @@ if [[ -a 'fly.toml' ]]; then
     echo 'ERROR: fly.toml already exists.'
     exit 1
 fi
-
-command -v jq >/dev/null || { echo "Please install jq"; exit 1; }
 
 # Generate random app name.
 export app="bridge-$(tr -dc '0-9a-z' </dev/urandom | dd bs=8 count=1 2>/dev/null)"
