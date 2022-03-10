@@ -16,6 +16,8 @@ if [[ -a 'fly.toml' ]]; then
     exit 1
 fi
 
+command -v jq >/dev/null || { echo "Please install jq"; exit 1; }
+
 # Generate random app name.
 export app="bridge-$(tr -dc '0-9a-z' </dev/urandom | dd bs=8 count=1 2>/dev/null)"
 echo "If something goes wrong, run 'flyctl apps destroy ${app}' and start again."
