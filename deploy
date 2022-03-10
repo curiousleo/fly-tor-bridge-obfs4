@@ -20,9 +20,9 @@ export email="${EMAIL}"
 export region="${REGION:-fra}"
 
 # fly.toml should not exist.
-if [[ -a 'fly.toml' ]]; then
-    echo 'ERROR: fly.toml already exists.'
-    exit 1
+if [[ -e 'fly.toml' ]]; then
+  echo 'ERROR: fly.toml already exists.'
+  exit 1
 fi
 
 # Generate random app name.
@@ -38,8 +38,8 @@ flyctl ips allocate-v4 --config "${config}"
 flyctl volumes create fly_obfs4 --region "${region}" --size 1 --config "${config}"
 
 # Read IPv4 address.
-export addr="$(flyctl ips list --json --config "${config}" | \
-    jq --raw-output '.[] | select(.Type == "v4") | .Address')"
+export addr="$(flyctl ips list --json --config "${config}" |
+  jq --raw-output '.[] | select(.Type == "v4") | .Address')"
 
 # Generate both ports in one go to make sure they are not equal.
 ports="$(shuf -i 1024-65535 -n 2)"
