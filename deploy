@@ -4,6 +4,15 @@
 
 set -Eeuo pipefail
 
+command -v jq >/dev/null || {
+  echo "ERROR: 'jq' not found, please install it."
+  exit 1
+}
+command -v flyctl >/dev/null || {
+  echo "ERROR: 'flyctl' not found, please install it."
+  exit 1
+}
+
 # EMAIL is mandatory.
 export email="${EMAIL}"
 
