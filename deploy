@@ -26,7 +26,8 @@ if [[ -e 'fly.toml' ]]; then
 fi
 
 # Generate random app name.
-export app="bridge-$(tr -dc '0-9a-z' </dev/urandom | dd bs=8 count=1 2>/dev/null)"
+export id="$(tr -dc '0-9a-z' </dev/urandom | dd bs=8 count=1 2>/dev/null)"
+export app="bridge-${id}"
 echo "If something goes wrong, run 'flyctl apps destroy ${app}' and start again."
 echo
 
@@ -35,7 +36,7 @@ flyctl launch --name "${app}" --region "${region}" --image thetorproject/obfs4-b
 config="${app}-fly.toml"
 mv fly.toml "${config}"
 flyctl ips allocate-v4 --config "${config}"
-flyctl volumes create fly_obfs4 --region "${region}" --size 1 --config "${config}"
+flyctl volumes create "obfs4_${id}" --region "${region}" --size 1 --config "${config}"
 
 # Read IPv4 address.
 export addr="$(flyctl ips list --json --config "${config}" |
@@ -69,7 +70,7 @@ ORPort 0.0.0.0:${or_port} NoAdvertise"""
   OBFS4V_AccountingStart = "month 1 00:00"
 
 [mounts]
-  source = "fly_obfs4"
+  source = "obfs4_${id}"
   destination = "/var/lib/tor"
 
 [[services]]
